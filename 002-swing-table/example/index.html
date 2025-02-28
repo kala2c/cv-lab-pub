@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Table Component</title>
+    <style>
+        /**  表格边框合并  **/
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <swing-table :data="tableData" :span-method="(row, col, rowIndex, colIndex) => {
+        if (col.prop === 'date') {
+            return [1, 1];
+        } else {
+            return [1, 1];
+        }
+    }">
+        <s-table-column fixed type="index" width="40"></s-table-column>
+        <s-table-column fixed type="selection" width="40"></s-table-column>
+        <s-table-column label="日期" prop="date">
+            <template #default="{ row }">
+                <div>{{ row && row.date }}</div>
+                <input v-model="row.date" style="width: 80px;">
+            </template>
+            <template #header>
+                自定义表头
+            </template>
+        </s-table-column>
+        <s-table-column v-if="show" label="动态列">
+            1111
+        </s-table-column>
+        <s-table-column label="配送信息">
+            <s-table-column label="姓名" prop="name" width="800"></s-table-column>
+            <s-table-column label="地址">
+                <s-table-column label="省份" prop="pro" width="60"></s-table-column>
+                <s-table-column label="城市" prop="city" width="90"></s-table-column>
+            </s-table-column>
+        </s-table-column>
+    </swing-table>
+
+    <button @click="show = !show">1</button>
+</div>
+
+<script src="./vue.min.js"></script>
+<script src="../dist.min.js"></script>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                show: false,
+                tableData: [
+                    { date: 2021, name: 'abc', pro: 'def', city: 'ghi' },
+                    { date: 1898, name: 'abc', pro: 'def', city: 'ghi' },
+                    { date: 2023, name: 'abc', pro: 'def', city: 'ghi' },
+                    { date: 2024, name: 'abc', pro: 'def', city: 'ghi' },
+                    { date: 1995, name: 'abc', pro: 'def', city: 'ghi' },
+                    { date: 1996, name: 'abc', pro: 'def', city: 'ghi' },
+                    { date: 1867, name: 'abc', pro: 'def', city: 'ghi' },
+                    { date: 1898, name: 'abc', pro: 'def', city: 'ghi' },
+                ]
+            }
+        },
+        mounted() {
+        }
+    });
+</script>
+</body>
+</html>
