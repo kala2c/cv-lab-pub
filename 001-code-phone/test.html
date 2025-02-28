@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>代码编辑器</title>
+  <link rel="stylesheet" href="./css/code.css?v=1.0">
+</head>
+<body>
+  <div id="app">
+    <div class="code">
+      <div class="nav">
+        <ul>
+          <li>
+            <select name="" id="">
+              <option value="">网页</option>
+            </select>
+          </li>
+          <li data-index="1">
+            <span>html</span>
+          </li>
+          <li data-index="2">
+            <span>css</span>
+          </li>
+          <li data-index="3">
+            <span>js</span>
+          </li>
+          <li>
+            <select name="" id="theme">
+              <option value="monokai">monokai</option>
+              <option value="ambiance">ambiance</option>
+              <option value="chaos">chaos</option>
+              <option value="chrome">chrome</option>
+              <option value="dracula">dracula</option>
+              <option value="tomorrow">tommorrow</option>
+              <option value="solarized_light">solarized_light</option>
+              <option value="solarized_dark">solarized_dark</option>
+            </select>
+          </li>
+          <li class="preview-btn">
+            <span>预览</span>
+          </li>
+        </ul>
+      </div>
+      <div class="editor-group-web">
+        <div id="editor-html" class="editor"></div>
+        <div id="editor-css" class="editor"></div>
+        <div id="editor-js" class="editor"></div> 
+      </div>
+      <div class="symbol-input">
+        <!-- <input type="text" class="toggle-btn" value="&theta;"> -->
+        <div class="toggle-btn">&theta;</div>
+        <!-- <input type="text" class="tab-btn" value="tab"> -->
+        <!-- <div class="tab-btn">tab</div> -->
+      </div>
+    </div>
+    <textarea id="v-input"></textarea>
+    <div class="preview">
+      <iframe id="window" src="./preview.html" frameborder="0"></iframe>
+      <div class="toolbar">
+        <div class="close-preview-btn"><img src="./images/back.gif" alt=""></div>
+        <div class="refresh-preview-btn"><img src="./images/refresh.gif" alt=""></div>
+      </div>
+    </div>
+  </div>
+  <script src="./lib/emmet.js"></script>
+  <script src="./lib/ace-builds/src/ace.js"></script>
+  <script src="./lib/ace-builds/src/ext-emmet.js"></script>
+  <script src="./lib/ace-builds/src/ext-language_tools.js"></script>
+  <script>
+    let q = selector => { return document.querySelector(selector) }
+    // 获取所有html-Element
+    // 编辑器
+    , code           = q('.code')
+    , editorGroupWeb = q('.editor-group-web')
+    , editorWebList  = editorGroupWeb.querySelectorAll('.editor')
+    // 导航栏
+    , navList = q('.nav').querySelectorAll('li')
+    , theme   = q('#theme')
+    // 符号输入
+    , symbolInput     = q('.symbol-input')
+    , symbolToggleBtn = q('.toggle-btn')
+    , vInput = q('#v-input')
+    // , tabBtn = q('.tab-btn')
+    // 预览按钮、容器、窗口
+    , previewBtn = q('.preview-btn')
+    , preview    = q('.preview')
+    , iframe     = q('#window')
+    // 预览界面的工具
+    , closePreviewBtn   = q('.close-preview-btn') 
+    , refreshPreviewBtn = q('.refresh-preview-btn') 
+    // 打开预览
+    previewBtn.addEventListener('click', () => {
+      render()
+      preview.style.display = 'block'
+      code.style.display = 'none'
+      iframe.contentWindow.location.reload()
+    })
+    function render() {
+      let html = editor.html.getValue()
+      let css = editor.css.getValue()
+      let js = editor.js.getValue()
+      localStorage.setItem('code-html', html)
+      localStorage.setItem('code-css', css)
+      localStorage.setItem('code-js', js)
+    }
+    // 预览界面返回编辑器
+    closePreviewBtn.addEventListener('click', function() {
+      preview.style.display = 'none'
+      code.style.display = 'block'
+    })
+    // 预览界面刷新
+    refreshPreviewBtn.addEventListener('click', function() {
+      iframe.contentWindow.location.reload()
+    })
+    // 渲染编辑器
+    ace.require('ace/ext/language_tools');
+    const editor = {
+      html: ace.edit("editor-html"),
+      css: ace.edit("editor-css"),
+      js: ace.edit("editor-js"),
+      current: null
+    }
+    editor.current = editor.html
+    // 设置主题、模式、属性
+    editor.html.setTheme('ace/theme/monokai')
+    editor.css.setTheme('ace/theme/monokai')
+    editor.js.setTheme('ace/theme/monokai')
+    editor.html.session.setMode("ace/mode/html")
+    editor.html.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true,
+      enableEmmet: true
+    })
+    editor.css.session.setMode("ace/mode/css")
+    editor.css.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    })
+    editor.js.session.setMode("ace/mode/javascript")
+    editor.js.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    })
+    // 预览后记忆代码
+    if (localStorage.getItem('code-html')) {
+      editor.html.setValue(localStorage.getItem('code-html'))
+    }
+    if (localStorage.getItem('code-css')) {
+      editor.css.setValue(localStorage.getItem('code-css'))
+    }
+    if (localStorage.getItem('code-js')) {
+      editor.js.setValue(localStorage.getItem('code-js'))
+    }
+    // 点击tab栏切换编辑器
+    let currentIndex = '1'
+    navList.forEach(nav => {
+      if (nav.getAttribute('data-index') === currentIndex) {
+        nav.setAttribute('class', 'active')
+        editorWebList.forEach(editor => {
+          editor.style.transform = "translateX(-"+(currentIndex-1)*100+"%)"
+        })
+      }
+      nav.addEventListener('click', () => {
+        let index = nav.getAttribute('data-index')
+        if (!index) return
+        if (currentIndex != index) {
+          navList[currentIndex].setAttribute('class', '')
+          navList[index].setAttribute('class', 'active')
+          currentIndex = index
+        }
+        editorWebList.forEach(editor => {
+          editor.style.transform = "translateX(-"+(index-1)*100+"%)"
+        })
+        switch (currentIndex) {
+          case '1':
+            editor.current = editor.html
+            break
+          case '2':
+            editor.current = editor.css
+            break
+          case '3':
+            editor.current = editor.js
+            break
+        }
+      })
+    })
+    vInput.oncopy = function() { return false }
+    // 编辑器失焦时保持键盘输入
+    vInput.addEventListener('input', function() {
+      if (this.value.length < 1) {
+        editor.current.execCommand('backspace')
+      } else {
+        editor.current.insert(this.value.substr(1))
+      }
+      console.log(this.value)
+      // input标签聚焦后再赋值可以把光标移动到最后
+      this.focus()
+      this.value = "v"
+    })
+    vInput.addEventListener('keydown', function() {
+      console.log(event.key)
+      if (event.key == 'Tab') {
+        editor.current.indent()
+        setTimeout(() => {
+          vInput.focus()
+          vInput.value = 'v'
+        }, 100)
+      }
+    })
+    // 渲染符号
+    symbolList = ['\'', '\"', '+', '=', '<', '>', '(', '[', '{',
+              '#','\:', '\;', '!', '$', '|', '&', ')', ']', '}',
+              '*', '-', '_',  '?', '%', '/', ',', '\\','`', '.'];
+    // 没有 . ~ ^ @  
+    symbolList.forEach(item => {
+      let symbolItem = document.createElement('div')
+      symbolItem.innerText = item
+      symbolItem.addEventListener('click', () => {
+        editor.current.insert(item)
+        editor.current.onFocus()
+        // input标签聚焦后再赋值可以把光标移动到最后
+        vInput.focus()
+        vInput.value = 'v'
+      })
+      symbolInput.appendChild(symbolItem)
+    })
+    // 符号输入表展开与收起
+    symbolToggleBtn.addEventListener('click', function() {
+      let unflodHeight = '75px'
+      let flogHeight = '50px'
+      if (symbolInput.style.height === unflodHeight) {
+        code.style.paddingBottom = flogHeight
+        symbolInput.style.height = flogHeight
+      } else {
+        code.style.paddingBottom = unflodHeight
+        symbolInput.style.height = unflodHeight
+      }
+      vInput.focus()
+      vInput.value = 'v'
+    })
+    // 模拟tab键 主要为了emmet 但是没用
+    // tabBtn.addEventListener('click', () => {
+    //   editor.current.indent()
+    //   editor.current.onFocus()
+    //   vInput.focus()
+    //   vInput.value = 'v'
+    // })
+    // 修改主题
+    if (localStorage.getItem('code-theme')) {
+      setTheme(localStorage.getItem('code-theme'))
+      theme.value = localStorage.getItem('code-theme')
+    }
+    theme.addEventListener('change', function() {
+      let themeName = this.value
+      localStorage.setItem('code-theme', themeName)
+      setTheme(themeName)
+    })
+    function setTheme(theme) {
+      editor.html.setTheme('ace/theme/'+theme)
+      editor.css.setTheme('ace/theme/'+theme)
+      editor.js.setTheme('ace/theme/'+theme)
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+ul,
+li {
+  list-style: none;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200%;
+  height: 100%;
+}
+#app .code,
+#app .preview {
+  transition: transform 0.8s ease;
+}
+#app .code {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+#app .code .nav {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 30px;
+  background-color: #393d49;
+}
+#app .code .nav ul {
+  display: flex;
+  height: 100%;
+}
+#app .code .nav ul li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  text-align: center;
+}
+#app .code .nav ul li.active {
+  background-color: #5EB878;
+}
+#app .code .nav select {
+  max-width: 60px;
+  outline: none;
+  color: #fff;
+  background-color: #393d49;
+}
+#app .code .editor-group-web {
+  display: flex;
+  width: 300%;
+  height: 100%;
+}
+#app .code .editor-group-web .editor {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+}
+#app .code .symbol-input {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 50px;
+  background-color: #eee;
+  transform: height 0.6s ease;
+}
+#app .code .symbol-input div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 10%;
+  height: 25px;
+}
+#app .code .symbol-input input {
+  width: 10%;
+  height: 25px;
+  padding: 0;
+  border: none;
+  outline: none;
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+  text-align: center;
+  line-height: 25px;
+  background-color: inherit;
+}
+#app #v-input {
+  position: absolute;
+  top: 0;
+  left: -100px;
+  width: 50px;
+}
+#app .preview {
+  width: 100%;
+  height: 100%;
+}
+#app .preview iframe {
+  width: 100%;
+  height: 100%;
+}
+#app .preview .toolbar {
+  display: none;
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 60px;
+  height: 30px;
+  opacity: 0.7;
+}
+#app .preview .toolbar .close-preview-btn,
+#app .preview .toolbar .refresh-preview-btn {
+  float: left;
+  width: 50%;
+  height: 100%;
+}
+#app .preview .toolbar .close-preview-btn img,
+#app .preview .toolbar .refresh-preview-btn img {
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,73 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-size: cover;
+}
+.section {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+.section.first {
+  position: relative;
+}
+.section.first .wrap,
+.section.first .overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.section.first .overlay {
+  z-index: 10;
+  background-color: #453f3f;
+}
+.section.first .wrap {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.section.first .wrap .demo-pic {
+  display: flex;
+  width: 140px;
+  height: 140px;
+}
+.section.first .wrap .demo-pic img {
+  width: 70px;
+  height: 140px;
+}
+.section.first .wrap .desc {
+  width: 80%;
+  margin-top: 50px;
+  color: hsla(0, 0%, 100%, 0.9);
+  text-align: center;
+  line-height: 2;
+  font-size: 1.2em;
+  padding-bottom: 20px;
+}
+.section.first .wrap .href {
+  width: 100px;
+  height: 30px;
+  margin-top: 5px;
+  color: hsla(0, 0%, 100%, 0.9);
+  border: 1px solid #eee;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  line-height: 30px;
+}
+.section.first .wrap .logo {
+  width: 150px;
+  height: 150px;
+  margin-top: 50px;
+  background-image: url(../images/back.png);
+  background-size: 150px 150px;
+}
