@@ -77,6 +77,7 @@ export default {
           nodeDepth: 0,
           leafList: [],
           render: pNode,
+          isLeaf: false,
           $scopeSlots: componentInstance.$scopedSlots,
           $slot: componentInstance.$slots,
         };
@@ -100,6 +101,7 @@ export default {
             recursion(child, depth + 1, newTrace);
           }
         });
+        column.isLeaf = isLeaf;
         // 将当前节点加入到表头行信息中
         if (depth > 0) {
           if (headRows[depth-1]) {

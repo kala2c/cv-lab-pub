@@ -46,6 +46,15 @@ export default {
     } else {
       child = label;
     }
+    const children = [this.createCell(child)];
+    if (this.col.isLeaf && !this.col.propsData.resizeDisable) {
+      children.push(h('div', {
+        class: ['resizer'],
+        attrs: {
+          'data-uid': this.col._uid,
+        },
+      }))
+    }
     return h('th', {
       attrs: {
         rowspan: this.rowspan,
@@ -53,7 +62,7 @@ export default {
       },
       style,
       class: classList,
-    }, [this.createCell(child)]);
+    }, children);
   },
   props: {
     col: Object,

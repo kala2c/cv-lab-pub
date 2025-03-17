@@ -5,10 +5,11 @@ const moment = require('moment');
 const path = require("node:path");
 const fs = require("node:fs");
 const { readdirVueFiles, compileVueFile, getTemplateString } = require("./core");
+const config = require("./config");
 
-const distPath = path.resolve(__dirname, 'dist.min.js');
+const distPath = config.distPath;
 // 抄送路径
-const copyPath = "E:\\dev-space\\spacepowserver-service\\src\\main\\webapp\\frmPatternProRenew\\js\\swing-table.min.js";
+const copyPath = config.copyPath;
 
 const srcPath = path.resolve(__dirname, 'src');
 
@@ -57,6 +58,11 @@ async function compileAll() {
 
 async function execCopy() {
     if (!copyPath) return;
+    const copyDir = path.dirname(copyPath);
+    if (!fs.existsSync(copyDir)) {
+        console.log(`抄送失败：抄送路径不存在：${copyDir}`);
+        return;
+    }
     fs.copyFileSync(distPath, copyPath);
     console.log('Copy success');
 }

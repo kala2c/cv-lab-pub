@@ -143,6 +143,9 @@ export default {
     }
   },
   emits: ['row-click', 'cell-click'],
+  mounted() {
+    this.initResizeCol();
+  },
   methods: {
     handleUpdateColumnList(columnList) {
       this.columnList = columnList;
@@ -265,7 +268,50 @@ export default {
         }
       }
       return tmpA1.concat(tmpB1);
-    }
+    },
+    /**
+     * 初始化拖拽调整列宽
+     */
+    initResizeCol() {
+      let startX, startWidth, selectCol;
+      document.addEventListener('mousedown', (e) => {
+        const el = e.target;
+        if (el.className.indexOf('resizer') > -1) {
+          const colUid = el.getAttribute('data-uid');
+          const cols = this.columnList.filter(o => o._uid+'' === colUid+'');
+          selectCol = cols[0] || null;
+          if (!selectCol) return;
+          startX = e.pageX;
+          if (selectCol.propsData.width) {
+            startWidth = parseInt(selectCol.propsData.width);
+          } else {
+            startWidth = el.parentNode.offsetWidth;
+          }
+        }
+      });
+      document.addEventListener('mousemove', (e) => {
+        if (!selectCol) return;
+        // const el = e.target;
+        // if (el.className.indexOf('resizer') > -1) {
+          const newWidth = startWidth + (e.pageX - startX);
+          selectCol.propsData.width = newWidth;
+        // }
+      });
+      document.addEventListener('mouseup', (e) => {
+        startX = 0;
+        startWidth = 100;
+        selectCol = null;
+      });
+      setTimeout(() => {
+        const tableHead = this.$el.getElementsByClassName('table-head')[0];
+        if (tableHead) {
+          const resizerList = tableHead.getElementsByClassName('resizer');
+          for (let i = 0; i < resizerList.length; i++) {
+            resizerList[i].style.height = tableHead.offsetHeight + 'px';
+          }
+        }
+      }, 1000);
+    },
   }
 }
 </script>
@@ -307,6 +353,19 @@ export default {
       position: relative;
       z-index: 1001;
     }
+  }
+  // 拖拽
+  .swing-table .table-head th {
+    position: relative;
+  }
+  .swing-table .table-head th .resizer {
+    position: absolute;
+    bottom: 0;
+    right: -4px;
+    width: 7px;
+    height: 100%;
+    cursor: ew-resize;
+    z-index: 99999;
   }
   // 单元格样式
   .swing-table-cell {

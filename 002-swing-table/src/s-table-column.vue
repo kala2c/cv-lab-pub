@@ -41,7 +41,10 @@ export default {
       type: String,
       default: 'left',
     },
-
+    resizeDisable: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
