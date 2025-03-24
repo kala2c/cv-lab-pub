@@ -131,13 +131,20 @@ export default {
       if (classList && classList.length > 0) {
         params.class = classList;
       }
+      let tipTitle = '';
+      const tipTitleFunc = this.col.propsData.tipTitle;
+      if (typeof tipTitleFunc === 'function') {
+        tipTitle = tipTitleFunc(this.row, this.col.propsData, this.rowIndex, this.colIndex);
+      } else if (tipTitleFunc === true) {
+        tipTitle = this.row[this.col.propsData.prop];
+      }
       const content = h('div', {
         class: 'swing-table-cell',
         style: {
           width: this.col.propsData.width + 'px',
         },
         attrs: {
-          title: this.row[this.col.propsData.prop] || '',
+          title: tipTitle,
         },
       }, [child]);
       return h('td', params, [content]);

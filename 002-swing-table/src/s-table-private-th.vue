@@ -85,7 +85,7 @@ export default {
           display: 'block',
           width: this.col.propsData.width + 'px',
           boxSizing: 'border-box',
-          padding: '3px 5px',
+          padding: '2px 5px',
           // textOverflow: 'ellipsis',
           // whiteSpace: 'nowrap',
           cursor: 'default'

@@ -18,6 +18,7 @@ export default {
       default: 'normal',
     },
     // type为selection有效
+    // 标记该列是否可选择
     selectable: {
       // 需返回值 [true, false, 'none']  none时不显示多选框
       // 函数参数 row, col, rowIndex, colIndex
@@ -45,6 +46,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    // 鼠标悬浮在单元格上时的提示标题
+    tipTitle: {
+      // 函数参数 row, col, rowIndex, colIndex 
+      // 需返回值 字符串
+      type: [Function, Boolean],
+      default: true
+    }
   },
   data() {
     return {
